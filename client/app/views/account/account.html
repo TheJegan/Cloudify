@@ -1,0 +1,6 @@
+<div layout="row" ng-if="!vm.account.soundCloudToken">
+    <img ng-click="vm.soundCloudLogin()" src="http://connect.soundcloud.com/2/btn-connect-sc-l.png" />
+</div>
+<div layout="row" ng-repeat="(key, value) in vm.account.user">
+    {{key}} {{value}}
+</div>
