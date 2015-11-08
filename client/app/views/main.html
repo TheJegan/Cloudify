@@ -1,3 +1,14 @@
-<div layout="row">
-This boilerplate is everything you need to get up and running quickly with AngularJS.
+<div class="playlists-namespace">
+    <h1>Playlists</h1>
+    
+    <div class="playlist" ng-repeat="playlists in ['Jay-z Freestyle', 'Bloodsport', 'Habasa', 'Night 4'] track by $index">
+
+        <img class="inline-block" src="../images/redIcon.png"></img>
+        <div class="inline-block">
+            <div class="playlist-name">{{playlists}}</div>
+            <div class="num-songs">4 songs</div>
+        </div>
+    </div>
+            
+    
 </div>
