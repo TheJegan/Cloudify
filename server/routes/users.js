@@ -28,9 +28,7 @@ router.post('/spotify/add', env.isAuthenticated, function(req, res, next)
 		oauthID: OAuthToken,
 		createdBy: userId,
 		externalAccountName: 'spotify'
-	}, function (err, user) {
-	  // if (err) return handleError(err);
-	  // saved!
+	}, function (err, user) {	 
 	  if(err)
 		{
 			res.send(err);
@@ -41,10 +39,13 @@ router.post('/spotify/add', env.isAuthenticated, function(req, res, next)
 			_profile: user._id,
 		}, function(err, r)
 		{
-			response.accounts = r;
+			User.find({_id: r._profile}, function(err, u){
+				response.accounts = u;
 
-			res.send(response);
-		})
+				res.send(response);
+			});
+			
+		});
 	})
 });
 
