@@ -11,6 +11,9 @@ var auth = require('./routes/auth');
 
 var session = require('express-session');
 var passport = require('passport');
+var mongoose = require('mongoose');
+var config = require('./env/config');
+mongoose.connect(config.mongooseURL);
 
 var app = express();
 
