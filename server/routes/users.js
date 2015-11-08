@@ -20,29 +20,32 @@ router.post('/spotify/add', env.isAuthenticated, function(req, res, next)
 	var userId = req.user._id;
 	var response = [];
 
-	var newUser = new User({
-		oauthID: OAuthToken,
-		createdBy: userId,
-		externalAccountName: 'spotify'
-	});
-
 	response = req.user;
 	response.accounts = [];
 
-	newUser.save(function(user)
-	{
-		var relationship = new Relationship({
+
+	User.create({
+		oauthID: OAuthToken,
+		createdBy: userId,
+		externalAccountName: 'spotify'
+	}, function (err, user) {
+	  // if (err) return handleError(err);
+	  // saved!
+	  if(err)
+		{
+			res.send(err);
+		}
+
+		Relationship.create({
 			_user: userId,
 			_profile: user._id,
-		});
-
-		relationship.save(function(u)
+		}, function(err, r)
 		{
-			response.accounts = u;
+			response.accounts = r;
 
 			res.send(response);
-		});
-	});
+		})
+	})
 });
 
 router.put('/spotify/update/:spotifyId', env.isAuthenticated, function(req, res, next)

@@ -5,7 +5,7 @@ var usersSchema = new mongoose.Schema({
     oauthID: String
     ,name: String
     ,displayName: String
-    ,createdBy: Number
+    ,createdBy: String
     ,createdDateTime: { type: Date, default: Date.now }
     ,externalAccountName: String
 });
