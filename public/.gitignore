@@ -1,0 +1,8 @@
+.tmp
+.sass-cache
+.DS_STORE
+node_modules
+dist
+bower_components
+docs
+test/coverage
