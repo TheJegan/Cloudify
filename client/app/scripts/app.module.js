@@ -14,7 +14,9 @@
             'ngBoilerplateApp',
             [
                 'ngBoilerplateApp.core',
-                'ngBoilerplateApp.main'
+                'ngBoilerplateApp.main',
+                'ngBoilerplateApp.account',
+                'SoundCloud'
             ]
         );
 })();
