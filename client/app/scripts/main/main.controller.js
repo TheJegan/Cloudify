@@ -12,9 +12,10 @@
         .module('ngBoilerplateApp.main')
         .controller('MainController', MainController);
 
-    MainController.$inject = ['$scope'];
+    MainController.$inject = ['$scope', 'account'];
 
-    function MainController ($scope) {
+    function MainController ($scope, account) {
+        $scope.accountData = account.data;
         $scope.awesomeThings = [
           'HTML5 Boilerplate',
           'AngularJS',
