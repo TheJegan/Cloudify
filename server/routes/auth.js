@@ -9,19 +9,19 @@ var User = mongoose.model('User', userSchema);
 
 //Implement passport
 passport.serializeUser(function(user, done) {
-  done(null, user);
+    done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+    done(null, obj);
 });
 
 passport.use(new TwitterStrategy({
-    consumerKey: env.twitter.consumerKey, //env.config.twitter.consumerKey,
-    consumerSecret: env.twitter.consumerSecret, //'MGdqxBUI0lLoLc7KZYnW0xRNPAfpUL9diWFLU559lA', //env.config.twitter.consumerKey,
-    callbackURL: env.twitter.callback 
-  },
-   function(token, tokenSecret, profile, done) {    
+        consumerKey: env.twitter.consumerKey, //env.config.twitter.consumerKey,
+        consumerSecret: env.twitter.consumerSecret, //'MGdqxBUI0lLoLc7KZYnW0xRNPAfpUL9diWFLU559lA', //env.config.twitter.consumerKey,
+        callbackURL: env.twitter.callback
+    },
+    function(token, tokenSecret, profile, done) {
         console.log('profile');
         console.log('token: ' + token);
         console.log('tokenSecret: ' + tokenSecret);
@@ -30,14 +30,16 @@ passport.use(new TwitterStrategy({
 
 
         //todo: if twitter profile change, update
-        User.findOne({ oauthID: profile.id }, function(err, user) {
-            if(err) { console.log(err); }
+        User.findOne({
+            oauthID: profile.id
+        }, function(err, user) {
+            if (err) {
+                console.log(err);
+            }
 
             if (!err && user != null) {
                 done(null, user);
-            } 
-            else 
-            {
+            } else {
                 //log where u are authenticating from.
                 //e.g authType: twitter
                 var user = new User({
@@ -49,9 +51,9 @@ passport.use(new TwitterStrategy({
                 });
 
                 user.save(function(err) {
-                    if(err) {
+                    if (err) {
                         console.log(err);
-                    }else{
+                    } else {
                         console.log("saving user ...");
                         done(null, user);
                     }
@@ -67,9 +69,11 @@ passport.use(new TwitterStrategy({
 
 router.get('/twitter', passport.authenticate('twitter'));
 
-router.get('/twitter/callback', 
-  passport.authenticate('twitter', { successRedirect: '/index.html',
-                                     failureRedirect: '/fail' }));
+router.get('/twitter/callback',
+    passport.authenticate('twitter', {
+        successRedirect: '/index.html',
+        failureRedirect: '/fail'
+    }));
 
 
 module.exports = router;
