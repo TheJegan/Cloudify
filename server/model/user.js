@@ -1,4 +1,4 @@
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 
 var musicProfileSchema = mongoose.Schema({
     ExternalId: String,
@@ -18,7 +18,8 @@ var usersSchema = new mongoose.Schema({
         default: Date.now
     },
     externalAccountName: String,
-    musicProfile: [musicProfileSchema]
+    musicProfile: [musicProfileSchema],
+    playlist: [{type: mongoose.Schema.Types.ObjectId, ref: 'playlist'}]
 });
 
 

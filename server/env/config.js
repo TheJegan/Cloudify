@@ -8,7 +8,8 @@ var twitterStrategy = {
 
 var config = {
 	twitter: twitterStrategy,
-	mongooseURL: 'mongodb://jegan:todo@ds035563.mongolab.com:35563/todo',
+	// mongooseURL: 'mongodb://jegan:todo@ds035563.mongolab.com:35563/todo',
+	mongooseURL: 'mongodb://localhost/cloudify',
 	isAuthenticated: function(req, res, next)
 	{
 		 if (req.isAuthenticated()) {
