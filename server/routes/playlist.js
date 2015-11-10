@@ -33,20 +33,27 @@ router.get('/',  function(req, res, next) {
 router.post('/', env.isAuthenticated, function(req, res, next) {
 	var title = req.body.title;
 
-	// var playlist = new Playlist({
-	// 	title: title
-	// });
 
-	// playlist.save(function(err)
-	// {
-	// 	res.send(Playlist);
-	// });
 
 	Playlist.create({ title: title, _user: req.user._id }, function (err, playlist) {
 	  if (err) res.send(err);
 	  // saved!
 	  res.send(playlist)
 	})
+});
+
+
+router.get('/:playlistId/tracks/', env.isAuthenticated, function(req, res, next){
+	var playlistId = req.params.playlistId;
+	Playlist.find({_id: playlistId}, function(err, pl){
+		if(err)
+		{
+			res.send(err);
+		}
+
+		res.send(pl);
+		
+	}).populate('tracks').lean()
 });
 
 
