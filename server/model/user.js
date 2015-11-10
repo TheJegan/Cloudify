@@ -4,7 +4,7 @@ var musicProfileSchema = mongoose.Schema({
     ExternalId: String,
     username: String,
     accountName: String,
-    createdDateTime: Date
+    createdDateTime: {type: Date, default: Date.now}
 });
 
 

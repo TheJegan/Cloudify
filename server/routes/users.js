@@ -18,35 +18,13 @@ router.get('/me', env.isAuthenticated, function(req, res, next) {
 
 });
 
-router.get('/', function(req, res, next) {
-    var queue = vasync.queue(
-        function(task, callback) {
-            task(callback);
-        }, 1);
 
-    queue.push(function(callback) {
-        console.log('first task begins');
-        setTimeout(function() {
-            console.log('first task ends');
-            callback();
-        }, 500);
-    });
-
-    queue.push(function(callback) {
-        console.log('second task begins');
-        process.nextTick(function() {
-            console.log('second task ends');
-            callback();
-        });
-    });
-});
-
-router.post('/spotify/add', env.isAuthenticated, function(req, res, next) {
-    // vasync
+router.post('/soundcloud/add', env.isAuthenticated, function(req, res, next) {
     var queue = vasync.queue(function(task, callback) {
         task(callback);
     }, 1);
     var OAuthToken = req.body.oauth_token;
+    var username = req.body.username || "";
     var userId = '563feb68f4256911007d1b51'; //test hack
 
     if (req.user) {
@@ -66,12 +44,14 @@ router.post('/spotify/add', env.isAuthenticated, function(req, res, next) {
             } else {            
                 var u = user.toJSON();
                 var test = _.find(u.musicProfile, function(obj) {
-                    return obj.accountName === 'spotifyx';
+                    return obj.accountName === 'soundcloud';
                 });
 
                 if (typeof test === 'undefined') {
                     user.musicProfile.push({
-                        'accountName': 'some crap'
+                        ExternalId: OAuthToken,
+                        username: username,
+                        accountName: 'soundcloud'                      
                     });
                 }
 
@@ -95,11 +75,64 @@ router.post('/spotify/add', env.isAuthenticated, function(req, res, next) {
             }
         });
     });
+});
 
+router.post('/spotify/add', env.isAuthenticated, function(req, res, next) {
+    var queue = vasync.queue(function(task, callback) {
+        task(callback);
+    }, 1);
+    var OAuthToken = req.body.oauth_token;
+    var username = req.body.username || "";
+    var userId = '563feb68f4256911007d1b51'; //test hack
 
+    if (req.user) {
+        userId = req.user._id;
+    }
+        // qu
+    queue.push(function(callback) {
+        User.findById({
+            _id: userId
+        }, function(err, user) {
+            if (err) {
+                res.send(err);
+            }
 
+            if (!user) {
+                res.send('empty');
+            } else {            
+                var u = user.toJSON();
+                var test = _.find(u.musicProfile, function(obj) {
+                    return obj.accountName === 'spotify';
+                });
 
+                if (typeof test === 'undefined') {
+                    user.musicProfile.push({
+                        ExternalId: OAuthToken,
+                        username: username,
+                        accountName: 'spotify'                      
+                    });
+                }
 
+                user.save(function(err) {
+                    callback();
+                });
+            }
+        });
+    });
+
+    queue.push(function(callback) {
+        User.findById({
+            _id: userId
+        }, function(err, user) {
+            if (err) {}
+
+            if (user) {
+                resstatus(201).send(user);
+            } else {
+                res.send('somethings up');
+            }
+        });
+    });
 });
 
 router.put(':userId/spotify/update/:spotifyId', env.isAuthenticated, function(req, res, next) {
